@@ -33,20 +33,24 @@ function init() {
     
         uniforms: {
           time: { value: 0.0 },
-          map: { value: texture }
+          map: { value: texture },
+          amplitude: {value: 0.2},
+          freq: {value: 1.0}
         },
         
         wireframe: false,
           vertexShader: `
       
           uniform float time;
+          uniform float amplitude;
+          uniform float freq;
           varying vec2 vertexUV;
       
           void main()	{
             vertexUV = uv;
             vec4 result;
 
-            result = vec4(position.x, position.y, 0.2*cos(position.x+time), 1.0);
+            result = vec4(position.x, position.y, amplitude*cos(position.x*freq+time), 1.0);
       
             gl_Position = projectionMatrix
               * modelViewMatrix
@@ -83,6 +87,8 @@ function init() {
         //renderer, requestAnimationFrame, deltaTime,
         requestAnimationFrame( animate );
         plane.material.uniforms.time.value = plane.material.uniforms.time.value + 0.005;
+        plane.material.uniforms.amplitude.value = 0.2;
+        plane.material.uniforms.freq.value = 1.0;
         renderer.render( scene, camera );
     }
 
